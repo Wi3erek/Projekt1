@@ -1,0 +1,17 @@
+Strona:
+- 2 podstrony:
+	główna - artykuły
+	podstrony - logowanie/rejestracja
+
+główna:
+	artykuły (scroll), dodawanie/edytowanie/usuwanie artykułów po zalogowaniu
+	dodawanie artykułów - formularz (miejsce na autora, date itp.)
+	artykuły zapisują się w bazie danych (backend - supabase)
+	weryfikacja zalogowania przy modyfikowaniu formularzy
+
+logowanie/rejestracja:
+	też do bazy danych
+
+Czysty JS, zahostować na githubie, commity z opisami, tailwind css
+
+

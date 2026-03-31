@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strona główna</title>
+    <style>
+        header {
+            width: 100%;
+            height: 10dvh;
+            background-color: red;
+        }
+
+        html,
+        body {
+            height: 100%;
+            box-sizing: border-box;
+        }
+
+        #left {
+            width: 10%;
+            min-height: 90dvh;
+            float: left;
+            background-color: aquamarine;
+        }
+
+        #center {
+            width: 80%;
+            max-height: 90vh;
+            float: left;
+            background-color: blueviolet;
+            overflow-y: auto;
+        }
+
+        #right {
+            width: 10%;
+            height: 90dvh;
+            float: left;
+            background-color: aquamarine;
+        }
+
+        .art {
+            margin: 0 auto;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            padding: 20px;
+            font-size: 20px;
+            width: 80%;
+            height: 100%;
+            border: 3px dashed yellow;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .headbox {
+            margin: 0;
+            float: right;
+            height: 10dvh;
+            width: 10%;
+            background-color: rgb(255, 0, 85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .button {
+            margin: 0 auto;
+            width: 60px;
+            height: 30px;
+            border: 2px solid black;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        #addbox {
+            float: left;
+
+        }
+
+        #button-container {
+            width: 150px;
+            height: 60px;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .modi {
+            float: left;
+            width: 60px;
+            height: 60px;
+            background-color: pink;
+            text-align: center;
+        }
+
+        #headtitle {
+            float: left;
+            background-color: rgb(177, 6, 162);
+            width: 80%;
+            height: 10dvh;
+            text-align: center;
+            font-size: 40px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="box">
+        <header>
+            <div class="headbox" id="addbox">
+                <div class="button" id="add">
+                    DODAJ
+                </div>
+            </div>
+            <div id="headtitle">
+                <div id="title">
+                    Artykuły
+                </div>
+            </div>
+            <div class="headbox">
+                <div class="button" id="login">
+                    <a href="login.html">Log in</a>
+                </div>
+                <div class="button" id="register">
+                    <a href="signup.html">Sign up</a>
+                </div>
+            </div>
+        </header>
+        <div id="left">
+
+        </div>
+        <div id="center">
+            <div class="art">
+                <author>Tymon</author><time>16.04.2025</time>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ultricies ullamcorper ex, et porttitor nibh eleifend non. Vivamus a euismod
+                    libero, sit amet cursus urna. Integer commodo magna eget arcu dignissim, vel fringilla risus sagittis. Donec blandit tellus non vulputate
+                    pulvinar. Cras sed pellentesque magna, eu imperdiet mauris. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia
+                    curae; In quis enim mi. Mauris euismod eget est nec bibendum. Proin lobortis, neque in consequat dictum, felis felis suscipit elit, sed
+                    faucibus ipsum nunc quis nibh. Sed eget luctus tortor, imperdiet finibus risus. Pellentesque sed finibus est, vitae elementum dui.
+                    Suspendisse interdum ante at leo sodales, ac interdum sapien molestie. Maecenas sed lectus lacus. Suspendisse pharetra orci nec hendrerit
+                    aliquet.
+
+                    Nulla tincidunt nisl purus, sit amet sollicitudin tellus feugiat sit amet. Aenean sed lectus porttitor lacus tincidunt auctor sed sed nulla.
+                    Curabitur sit amet tortor viverra metus facilisis aliquam. Nullam semper magna sed efficitur feugiat. Proin at est vel metus faucibus
+                    laoreet ut quis tortor. Curabitur neque lorem, condimentum nec malesuada eget, malesuada vehicula urna. Morbi maximus dui et varius egestas.
+                    Nam vel augue id arcu tempor lacinia at sed dolor. Cras bibendum a odio sit amet egestas. Nullam imperdiet dignissim suscipit. Proin
+                    imperdiet mauris non mi rhoncus, in semper libero ullamcorper. In dignissim imperdiet eros, sed gravida sapien posuere sit amet.
+
+                    Maecenas non est urna. Nullam ultricies imperdiet sem, ac finibus ante ornare eu. Vestibulum in ante aliquet, bibendum eros in, placerat
+                    enim. Ut in gravida est. Vestibulum iaculis volutpat diam, gravida tristique ligula ultricies nec. Quisque at euismod turpis. Morbi iaculis
+                    tortor vitae neque volutpat interdum. Nunc mattis est eget nunc commodo ultrices. Etiam condimentum sapien sapien, sit amet facilisis dui
+                    accumsan ut.
+
+                    Integer ac fermentum ipsum. In id ligula id lectus ullamcorper efficitur sed non nisi. Etiam suscipit justo et bibendum lobortis. Integer id
+                    porttitor dolor. Morbi sollicitudin libero eu felis ornare, in molestie enim gravida. Nullam turpis lorem, interdum vitae odio et, molestie
+                    mattis augue. Nulla ut orci eu mauris hendrerit elementum. Nunc dictum libero vel nisl euismod auctor. Quisque vel ipsum accumsan, gravida
+                    lorem in, dapibus nisi. Quisque varius sit amet sem vel gravida. Vestibulum vel ipsum egestas lorem accumsan maximus et id quam.</p>
+                <div id="button-container">
+                    <div class="modi" id="edit">
+                        Edytuj
+                    </div>
+                    <div class="modi" id="delete">
+                        Usuń
+                    </div>
+                </div>
+
+            </div>
+            <div class="art">
+                <author>Tymon</author><time>16.04.2025</time>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ultricies ullamcorper ex, et porttitor nibh eleifend non. Vivamus a euismod
+                    libero, sit amet cursus urna. Integer commodo magna eget arcu dignissim, vel fringilla risus sagittis. Donec blandit tellus non vulputate
+                    pulvinar. Cras sed pellentesque magna, eu imperdiet mauris. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia
+                    curae; In quis enim mi. Mauris euismod eget est nec bibendum. Proin lobortis, neque in consequat dictum, felis felis suscipit elit, sed
+                    faucibus ipsum nunc quis nibh. Sed eget luctus tortor, imperdiet finibus risus. Pellentesque sed finibus est, vitae elementum dui.
+                    Suspendisse interdum ante at leo sodales, ac interdum sapien molestie. Maecenas sed lectus lacus. Suspendisse pharetra orci nec hendrerit
+                    aliquet.
+
+                    Nulla tincidunt nisl purus, sit amet sollicitudin tellus feugiat sit amet. Aenean sed lectus porttitor lacus tincidunt auctor sed sed nulla.
+                    Curabitur sit amet tortor viverra metus facilisis aliquam. Nullam semper magna sed efficitur feugiat. Proin at est vel metus faucibus
+                    laoreet ut quis tortor. Curabitur neque lorem, condimentum nec malesuada eget, malesuada vehicula urna. Morbi maximus dui et varius egestas.
+                    Nam vel augue id arcu tempor lacinia at sed dolor. Cras bibendum a odio sit amet egestas. Nullam imperdiet dignissim suscipit. Proin
+                    imperdiet mauris non mi rhoncus, in semper libero ullamcorper. In dignissim imperdiet eros, sed gravida sapien posuere sit amet.
+
+                    Maecenas non est urna. Nullam ultricies imperdiet sem, ac finibus ante ornare eu. Vestibulum in ante aliquet, bibendum eros in, placerat
+                    enim. Ut in gravida est. Vestibulum iaculis volutpat diam, gravida tristique ligula ultricies nec. Quisque at euismod turpis. Morbi iaculis
+                    tortor vitae neque volutpat interdum. Nunc mattis est eget nunc commodo ultrices. Etiam condimentum sapien sapien, sit amet facilisis dui
+                    accumsan ut.
+
+                    Integer ac fermentum ipsum. In id ligula id lectus ullamcorper efficitur sed non nisi. Etiam suscipit justo et bibendum lobortis. Integer id
+                    porttitor dolor. Morbi sollicitudin libero eu felis ornare, in molestie enim gravida. Nullam turpis lorem, interdum vitae odio et, molestie
+                    mattis augue. Nulla ut orci eu mauris hendrerit elementum. Nunc dictum libero vel nisl euismod auctor. Quisque vel ipsum accumsan, gravida
+                    lorem in, dapibus nisi. Quisque varius sit amet sem vel gravida. Vestibulum vel ipsum egestas lorem accumsan maximus et id quam.</p>
+                <div id="button-container">
+                    <div class="modi" id="edit">
+                        Edytuj
+                    </div>
+                    <div class="modi" id="delete">
+                        Usuń
+                    </div>
+                </div>
+
+            </div>
+            <div class="art">
+                <author>Tymon</author><time>16.04.2025</time>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ultricies ullamcorper ex, et porttitor nibh eleifend non. Vivamus a euismod
+                    libero, sit amet cursus urna. Integer commodo magna eget arcu dignissim, vel fringilla risus sagittis. Donec blandit tellus non vulputate
+                    pulvinar. Cras sed pellentesque magna, eu imperdiet mauris. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia
+                    curae; In quis enim mi. Mauris euismod eget est nec bibendum. Proin lobortis, neque in consequat dictum, felis felis suscipit elit, sed
+                    faucibus ipsum nunc quis nibh. Sed eget luctus tortor, imperdiet finibus risus. Pellentesque sed finibus est, vitae elementum dui.
+                    Suspendisse interdum ante at leo sodales, ac interdum sapien molestie. Maecenas sed lectus lacus. Suspendisse pharetra orci nec hendrerit
+                    aliquet.
+
+                    Nulla tincidunt nisl purus, sit amet sollicitudin tellus feugiat sit amet. Aenean sed lectus porttitor lacus tincidunt auctor sed sed nulla.
+                    Curabitur sit amet tortor viverra metus facilisis aliquam. Nullam semper magna sed efficitur feugiat. Proin at est vel metus faucibus
+                    laoreet ut quis tortor. Curabitur neque lorem, condimentum nec malesuada eget, malesuada vehicula urna. Morbi maximus dui et varius egestas.
+                    Nam vel augue id arcu tempor lacinia at sed dolor. Cras bibendum a odio sit amet egestas. Nullam imperdiet dignissim suscipit. Proin
+                    imperdiet mauris non mi rhoncus, in semper libero ullamcorper. In dignissim imperdiet eros, sed gravida sapien posuere sit amet.
+
+                    Maecenas non est urna. Nullam ultricies imperdiet sem, ac finibus ante ornare eu. Vestibulum in ante aliquet, bibendum eros in, placerat
+                    enim. Ut in gravida est. Vestibulum iaculis volutpat diam, gravida tristique ligula ultricies nec. Quisque at euismod turpis. Morbi iaculis
+                    tortor vitae neque volutpat interdum. Nunc mattis est eget nunc commodo ultrices. Etiam condimentum sapien sapien, sit amet facilisis dui
+                    accumsan ut.
+
+                    Integer ac fermentum ipsum. In id ligula id lectus ullamcorper efficitur sed non nisi. Etiam suscipit justo et bibendum lobortis. Integer id
+                    porttitor dolor. Morbi sollicitudin libero eu felis ornare, in molestie enim gravida. Nullam turpis lorem, interdum vitae odio et, molestie
+                    mattis augue. Nulla ut orci eu mauris hendrerit elementum. Nunc dictum libero vel nisl euismod auctor. Quisque vel ipsum accumsan, gravida
+                    lorem in, dapibus nisi. Quisque varius sit amet sem vel gravida. Vestibulum vel ipsum egestas lorem accumsan maximus et id quam.</p>
+                <div id="button-container">
+                    <div class="modi" id="edit">
+                        Edytuj
+                    </div>
+                    <div class="modi" id="delete">
+                        Usuń
+                    </div>
+                </div>
+
+            </div>
+            <div class="art">
+                <author>Tymon</author><time>16.04.2025</time>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ultricies ullamcorper ex, et porttitor nibh eleifend non. Vivamus a euismod
+                    libero, sit amet cursus urna. Integer commodo magna eget arcu dignissim, vel fringilla risus sagittis. Donec blandit tellus non vulputate
+                    pulvinar. Cras sed pellentesque magna, eu imperdiet mauris. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia
+                    curae; In quis enim mi. Mauris euismod eget est nec bibendum. Proin lobortis, neque in consequat dictum, felis felis suscipit elit, sed
+                    faucibus ipsum nunc quis nibh. Sed eget luctus tortor, imperdiet finibus risus. Pellentesque sed finibus est, vitae elementum dui.
+                    Suspendisse interdum ante at leo sodales, ac interdum sapien molestie. Maecenas sed lectus lacus. Suspendisse pharetra orci nec hendrerit
+                    aliquet.
+
+                    Nulla tincidunt nisl purus, sit amet sollicitudin tellus feugiat sit amet. Aenean sed lectus porttitor lacus tincidunt auctor sed sed nulla.
+                    Curabitur sit amet tortor viverra metus facilisis aliquam. Nullam semper magna sed efficitur feugiat. Proin at est vel metus faucibus
+                    laoreet ut quis tortor. Curabitur neque lorem, condimentum nec malesuada eget, malesuada vehicula urna. Morbi maximus dui et varius egestas.
+                    Nam vel augue id arcu tempor lacinia at sed dolor. Cras bibendum a odio sit amet egestas. Nullam imperdiet dignissim suscipit. Proin
+                    imperdiet mauris non mi rhoncus, in semper libero ullamcorper. In dignissim imperdiet eros, sed gravida sapien posuere sit amet.
+
+                    Maecenas non est urna. Nullam ultricies imperdiet sem, ac finibus ante ornare eu. Vestibulum in ante aliquet, bibendum eros in, placerat
+                    enim. Ut in gravida est. Vestibulum iaculis volutpat diam, gravida tristique ligula ultricies nec. Quisque at euismod turpis. Morbi iaculis
+                    tortor vitae neque volutpat interdum. Nunc mattis est eget nunc commodo ultrices. Etiam condimentum sapien sapien, sit amet facilisis dui
+                    accumsan ut.
+
+                    Integer ac fermentum ipsum. In id ligula id lectus ullamcorper efficitur sed non nisi. Etiam suscipit justo et bibendum lobortis. Integer id
+                    porttitor dolor. Morbi sollicitudin libero eu felis ornare, in molestie enim gravida. Nullam turpis lorem, interdum vitae odio et, molestie
+                    mattis augue. Nulla ut orci eu mauris hendrerit elementum. Nunc dictum libero vel nisl euismod auctor. Quisque vel ipsum accumsan, gravida
+                    lorem in, dapibus nisi. Quisque varius sit amet sem vel gravida. Vestibulum vel ipsum egestas lorem accumsan maximus et id quam.</p>
+                <div id="button-container">
+                    <div class="modi" id="edit">
+                        Edytuj
+                    </div>
+                    <div class="modi" id="delete">
+                        Usuń
+                    </div>
+                </div>
+
+            </div>
+            <div class="art">
+                <author>Tymon</author><time>16.04.2025</time>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ultricies ullamcorper ex, et porttitor nibh eleifend non. Vivamus a euismod
+                    libero, sit amet cursus urna. Integer commodo magna eget arcu dignissim, vel fringilla risus sagittis. Donec blandit tellus non vulputate
+                    pulvinar. Cras sed pellentesque magna, eu imperdiet mauris. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia
+                    curae; In quis enim mi. Mauris euismod eget est nec bibendum. Proin lobortis, neque in consequat dictum, felis felis suscipit elit, sed
+                    faucibus ipsum nunc quis nibh. Sed eget luctus tortor, imperdiet finibus risus. Pellentesque sed finibus est, vitae elementum dui.
+                    Suspendisse interdum ante at leo sodales, ac interdum sapien molestie. Maecenas sed lectus lacus. Suspendisse pharetra orci nec hendrerit
+                    aliquet.
+
+                    Nulla tincidunt nisl purus, sit amet sollicitudin tellus feugiat sit amet. Aenean sed lectus porttitor lacus tincidunt auctor sed sed nulla.
+                    Curabitur sit amet tortor viverra metus facilisis aliquam. Nullam semper magna sed efficitur feugiat. Proin at est vel metus faucibus
+                    laoreet ut quis tortor. Curabitur neque lorem, condimentum nec malesuada eget, malesuada vehicula urna. Morbi maximus dui et varius egestas.
+                    Nam vel augue id arcu tempor lacinia at sed dolor. Cras bibendum a odio sit amet egestas. Nullam imperdiet dignissim suscipit. Proin
+                    imperdiet mauris non mi rhoncus, in semper libero ullamcorper. In dignissim imperdiet eros, sed gravida sapien posuere sit amet.
+
+                    Maecenas non est urna. Nullam ultricies imperdiet sem, ac finibus ante ornare eu. Vestibulum in ante aliquet, bibendum eros in, placerat
+                    enim. Ut in gravida est. Vestibulum iaculis volutpat diam, gravida tristique ligula ultricies nec. Quisque at euismod turpis. Morbi iaculis
+                    tortor vitae neque volutpat interdum. Nunc mattis est eget nunc commodo ultrices. Etiam condimentum sapien sapien, sit amet facilisis dui
+                    accumsan ut.
+
+                    Integer ac fermentum ipsum. In id ligula id lectus ullamcorper efficitur sed non nisi. Etiam suscipit justo et bibendum lobortis. Integer id
+                    porttitor dolor. Morbi sollicitudin libero eu felis ornare, in molestie enim gravida. Nullam turpis lorem, interdum vitae odio et, molestie
+                    mattis augue. Nulla ut orci eu mauris hendrerit elementum. Nunc dictum libero vel nisl euismod auctor. Quisque vel ipsum accumsan, gravida
+                    lorem in, dapibus nisi. Quisque varius sit amet sem vel gravida. Vestibulum vel ipsum egestas lorem accumsan maximus et id quam.</p>
+                <div id="button-container">
+                    <div class="modi" id="edit">
+                        Edytuj
+                    </div>
+                    <div class="modi" id="delete">
+                        Usuń
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <div id="right">
+
+        </div>
+
+
+    </div>
+
+
+
+</body>
+
+</html>
