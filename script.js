@@ -1,7 +1,58 @@
 import { supabase } from './supabaseClient.js'
 
+const logbut = document.getElementById("loginbutton")
+if (logbut) {
+    logbut.addEventListener("click", loginF)
+}
+// przycisk logowania 
 
-async function getLogins(x) {
+const regbut = document.getElementById("registerbutton")
+if (regbut) {
+    regbut.addEventListener("click", registerF)
+}
+//przycisk rejestracji
+
+// ------------------------------------------
+
+async function logchecker(log, pass) {
+    const { data, error } = await supabase
+        .from('loginy')
+        .select('login, password')
+    if (error) {
+        console.error("Błąd pobierania:", error)
+        return
+    }
+
+    console.log(data);
+    for (let i = 0; i < data.length; i++) {
+        if (data[i].login == log && data[i].password == pass) {
+            return true
+        }
+    }
+    return false
+}
+// czy dane logowania sie zgadzają
+
+async function loginF() {
+    const login = document.getElementById("loglogin").value
+    const passwd = document.getElementById("logpasswd").value
+    console.log("Próba zalogowania: ", login, passwd);
+
+    const isLogOK = await logchecker(login, passwd)
+    console.log(isLogOK);
+    if (isLogOK == true) {
+        console.log("Zalogowano użytkownika", login);
+        window.location.href = "index.html"
+    }
+    else {
+        console.log("Błędny login lub hasło.");
+
+    }
+}
+// logowanie
+
+
+async function getLogins(log) {
     const { data, error } = await supabase
         .from('loginy')
         .select('login')
@@ -11,38 +62,15 @@ async function getLogins(x) {
     }
 
     for (let i = 0; i < data.length; i++) {
-        if (data[i].login == x) {
+        if (data[i].login == log) {
             return false
         }
     }
     return true
 }
+// czy loginu nie ma juz w bazie
 
-async function addUser(userlogin, userpasswd) {
-    const { data, error } = await supabase
-        .from('loginy')
-        .insert([
-            {
-                login: userlogin,
-                password: userpasswd
-            }
-        ])
-    if (error) {
-        console.error("Błąd dodawania użytkownika:", error.message)
-        return false
-    }
-    console.log("Zarejestrowano użytkownika", userlogin);
-    return true
-
-}
-
-
-
-
-const regbut = document.getElementById("registerbutton")
-regbut.addEventListener("click", register)
-
-async function register(x) {
+async function registerF() {
     const login = document.getElementById("reglogin").value
     const passwd = document.getElementById("regpasswd").value
     const passwd2 = document.getElementById("regpasswd2").value
@@ -73,3 +101,25 @@ async function register(x) {
     }
 
 }
+// rejestracja
+
+async function addUser(userlogin, userpasswd) {
+    const { data, error } = await supabase
+        .from('loginy')
+        .insert([
+            {
+                login: userlogin,
+                password: userpasswd
+            }
+        ])
+    if (error) {
+        console.error("Błąd dodawania użytkownika:", error.message)
+        return false
+    }
+    console.log("Zarejestrowano użytkownika", userlogin);
+    return true
+
+}
+// dodawanie do bazy danych (reg)
+
+
