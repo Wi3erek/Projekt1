@@ -31,6 +31,7 @@ if (artbox) {
         let artid = artykuly[i].id
         let artauthor = artykuly[i].author
         let artdate = artykuly[i].date
+        let arttitle = artykuly[i].title
         let arttext = artykuly[i].article
 
         const artDiv = document.createElement('div')
@@ -43,6 +44,9 @@ if (artbox) {
 
         const dateElem = document.createElement('time')
         dateElem.innerHTML = artdate
+
+        const titleElem = document.createElement('h3')
+        titleElem.innerHTML = arttitle
 
         const textElem = document.createElement('p')
         textElem.innerHTML = arttext
@@ -66,6 +70,7 @@ if (artbox) {
 
         artDiv.appendChild(authorElem)
         artDiv.appendChild(dateElem)
+        artDiv.appendChild(titleElem)
         artDiv.appendChild(textElem)
         artDiv.appendChild(buttonContainer)
 
