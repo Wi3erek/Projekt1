@@ -23,8 +23,84 @@ if (logout) {
     logout.addEventListener("click", logmeout)
 }
 
+const artbox = document.getElementById("center")
+if (artbox) {
+    const artykuly = await articleread()
+    console.log(artykuly);
+    for (let i = 0; i < artykuly.length; i++) {
+        let artid = artykuly[i].id
+        let artauthor = artykuly[i].author
+        let artdate = artykuly[i].date
+        let arttext = artykuly[i].article
+
+        const artDiv = document.createElement('div')
+        artDiv.setAttribute('class', 'art')
+        artDiv.setAttribute('id', 'art' + artid)
+
+        // zawartosc artykułów
+        const authorElem = document.createElement('author')
+        authorElem.innerHTML = artauthor
+
+        const dateElem = document.createElement('time')
+        dateElem.innerHTML = artdate
+
+        const textElem = document.createElement('p')
+        textElem.innerHTML = arttext
+
+        // przyciski edycji/usuwania
+        const buttonContainer = document.createElement('div')
+        buttonContainer.setAttribute('class', 'button-container')
+
+        const buttonEdit = document.createElement('button')
+        buttonEdit.setAttribute('class', 'art-button')
+        buttonEdit.setAttribute('onclick', 'articleEdit("art" + ' + artid + ')')
+        buttonEdit.innerHTML = "Edytuj"
+
+        const buttonDel = document.createElement('button')
+        buttonDel.setAttribute('class', 'art-button')
+        buttonDel.setAttribute('onclick', 'articleDel("art" + ' + artid + ')')
+        buttonDel.innerHTML = "Usuń"
+
+        buttonContainer.appendChild(buttonEdit)
+        buttonContainer.appendChild(buttonDel)
+
+        artDiv.appendChild(authorElem)
+        artDiv.appendChild(dateElem)
+        artDiv.appendChild(textElem)
+        artDiv.appendChild(buttonContainer)
+
+        artbox.appendChild(artDiv)
+    }
+}
+// dodawanie artykułów z bazy danych do strony
 
 // ------------------------------------------
+async function articleEdit(x) { //edytowanie artykułu
+    console.log("edytowanie artykułu", x);
+
+}
+window.articleEdit = articleEdit
+
+
+async function articleDel(x) { // usuwanie artykułu
+    console.log("usuwanie artykułu", x);
+
+}
+window.articleDel = articleDel
+
+
+
+async function articleread() {
+    const { data, error } = await supabase
+        .from('artykuly')
+        .select('*')
+    if (error) {
+        console.error("Błąd pobierania:", error)
+        return
+    }
+    return data
+
+}
 
 async function logmeout() {
     localStorage.removeItem("loginsave")
