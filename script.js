@@ -12,7 +12,23 @@ if (regbut) {
 }
 //przycisk rejestracji
 
+
+
+//zalogowano jako...
+
+
+
 // ------------------------------------------
+const loginsave = localStorage.getItem("loginsave")
+if (loginsave) {
+    loggedas(loginsave)
+}
+async function loggedas(login) {
+    const logElem = document.getElementById("logas")
+    if (logElem) {
+        logElem.innerHTML = login
+    }
+}
 
 async function logchecker(log, pass) {
     const { data, error } = await supabase
@@ -42,6 +58,7 @@ async function loginF() {
     console.log(isLogOK);
     if (isLogOK == true) {
         console.log("Zalogowano użytkownika", login);
+        localStorage.setItem("loginsave", login)
         window.location.href = "index.html"
     }
     else {
