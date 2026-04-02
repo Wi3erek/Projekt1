@@ -12,17 +12,25 @@ if (regbut) {
 }
 //przycisk rejestracji
 
-
-
-//zalogowano jako...
-
-
-
-// ------------------------------------------
 const loginsave = localStorage.getItem("loginsave")
 if (loginsave) {
     loggedas(loginsave)
 }
+//zalogowano jako...
+
+const logout = document.getElementById("logout")
+if (logout) {
+    logout.addEventListener("click", logmeout)
+}
+
+
+// ------------------------------------------
+
+async function logmeout() {
+    localStorage.removeItem("loginsave")
+    window.location = "index.html" //zmienic na login.html
+}
+
 async function loggedas(login) {
     const logElem = document.getElementById("logas")
     if (logElem) {
