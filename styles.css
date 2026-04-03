@@ -120,34 +120,43 @@ input {
     height: 30px;
 }
 
-#addform {
-    width: 300px;
+#addform,
+#editform {
+    width: 800px;
     padding: 20px;
 }
 
-#addform::backdrop {
+#addform::backdrop,
+#editform::backdrop {
     background-color: rgba(0, 0, 0, 0.5);
 }
 
-#addform * {
+#addform *,
+#editform * {
     box-sizing: border-box;
 }
 
 #addform label,
 #addform input,
 #addform textarea,
-#addform button {
+#addform button,
+#editform label,
+#editform input,
+#editform textarea,
+#editform button {
     display: block;
     width: 100%;
     margin-bottom: 10px;
     /* Odstęp między polami */
 }
 
-#addform textarea {
-    height: 80px;
+#addform textarea,
+#editform textarea {
+    height: 300px;
 }
 
-#addform h3 {
+#addform h3,
+#editform h3 {
     margin-top: 0;
     text-align: center;
 }

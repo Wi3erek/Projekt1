@@ -58,7 +58,7 @@ if (artbox) {
 
         const buttonEdit = document.createElement('button')
         buttonEdit.setAttribute('class', 'art-button')
-        buttonEdit.setAttribute('onclick', `articleEdit(${artid}, '${arttitle}')`)
+        buttonEdit.setAttribute('onclick', `showeditform(${artid}, '${arttitle}')`)
         buttonEdit.innerHTML = "Edytuj"
 
         const buttonDel = document.createElement('button')
@@ -164,11 +164,73 @@ window.addartcancel = addartcancel
 
 
 // ################## EDYTOWANIE ARTYKUŁU: ###################
-async function articleEdit(artnum) {
+async function showeditform(artnum) {
     console.log("edytowanie artykułu", artnum);
-}
-window.articleEdit = articleEdit
+    if (localStorage.getItem("loginsave")) {
 
+        const { data, error } = await supabase
+            .from('artykuly')
+            .select('*')
+            .eq('id', artnum)
+        if (error) {
+            console.error("Błąd pobierania:", error)
+            return
+        }
+        console.log(data);
+        const oldauthor = data[0].author
+        const olddate = data[0].date
+        const oldtitle = data[0].title
+        const oldtext = data[0].article
+        console.log(oldauthor, olddate, oldtitle, oldtext);
+
+        const editform = document.getElementById("editform")
+        document.getElementById("editartid").value = artnum
+        document.getElementById("editartauthor").value = oldauthor
+        document.getElementById("editartdate").value = olddate
+        document.getElementById("editarttitle").value = oldtitle
+        document.getElementById("editarttext").value = oldtext
+        console.log("formularz edytowania artykułu");
+        editform.showModal()
+    }
+    else {
+        alert("Musisz być zalogowany aby edytować artykuły!");
+    }
+}
+window.showeditform = showeditform
+
+async function editarttodb() {
+    const editform = document.getElementById("editform")
+
+    const editedformid = document.getElementById("editartid").value
+    const newauthor = document.getElementById("editartauthor").value
+    const newdate = document.getElementById("editartdate").value
+    const newtitle = document.getElementById("editarttitle").value
+    const newtext = document.getElementById("editarttext").value
+    const updatedData = { author: newauthor, date: newdate, title: newtitle, article: newtext }
+
+    console.log("zapisywanie zmian w artykule ", editedformid);
+
+    const { data, error } = await supabase
+        .from('artykuly')
+        .update(updatedData)
+        .eq('id', editedformid)
+    if (error) {
+        console.error("Błąd edytowania artykulu", error);
+    }
+    else {
+        console.log("Zaktualizowano artykuł ", editedformid, newtitle);
+        editform.close()
+        location.reload()
+    }
+}
+window.editarttodb = editarttodb
+
+async function editartcancel() {
+    console.log("anulowanie edytowania artykulu");
+    const editform = document.getElementById("editform")
+    editform.close()
+}
+window.editartcancel = editartcancel
 
 // ################## USUWANIE ARTYKUŁU: ######################
 async function articleDel(artnum, arttitle) {
@@ -196,6 +258,7 @@ async function articleread() {
     const { data, error } = await supabase
         .from('artykuly')
         .select('*')
+        .order('author', { ascending: true })
     if (error) {
         console.error("Błąd pobierania:", error)
         return

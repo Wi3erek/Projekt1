@@ -23,6 +23,20 @@
         <button onclick="addarttodb()">Dodaj</button>
         <button onclick="addartcancel()">Anuluj</button>
     </dialog>
+    <dialog id="editform">
+        <h3>Edytuj artykuł</h3>
+        <input type="hidden" id="editartid">
+        <label>Autor:</label>
+        <input id="editartauthor" type="text">
+        <label>Data:</label>
+        <input id="editartdate" type="date">
+        <label>Tytuł:</label>
+        <input id="editarttitle" type="text">
+        <label>Treść artykułu:</label>
+        <textarea id="editarttext"></textarea>
+        <button onclick="editarttodb()">Zapisz zmiany</button>
+        <button onclick="editartcancel()">Anuluj</button>
+    </dialog>
     <div id="box">
         <header>
             <div class="headbox" id="addbox">
