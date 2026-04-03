@@ -66,6 +66,12 @@
         </header>
         <div id="left">
             <button onclick="showaddform()">Dodaj</button>
+            <select id="sortby" onchange="reload()">
+                <option value="author">Autor</option>
+                <option value="date">Data</option>
+                <option value="title">Tytuł</option>
+                <option value="id">ID</option>
+            </select>
         </div>
         <div id="center">
         </div>

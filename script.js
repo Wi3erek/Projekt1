@@ -24,9 +24,10 @@ if (logout) {
 }
 
 // generowanie artykułów na stronie
+const sortby = document.getElementById("sortby").value
 const artbox = document.getElementById("center")
-if (artbox) {
-    const artykuly = await articleread()
+if (artbox && sortby) {
+    const artykuly = await articleread(sortby)
     console.log(artykuly);
     for (let i = 0; i < artykuly.length; i++) {
         let artid = artykuly[i].id
@@ -79,6 +80,11 @@ if (artbox) {
     }
 }
 
+async function reload() {
+    location.reload()
+}
+window.reload = reload
+
 // ############################################################
 
 
@@ -100,7 +106,7 @@ async function showaddform() {
 window.showaddform = showaddform
 
 // weryfikacja forma (czy dobrze wypełniony)
-async function checkaddart(author, date, title, text) {
+async function checkart(author, date, title, text) {
     const addarticle = { "author": author, "date": date, "title": title, "text": text }
     console.log(addarticle);
 
@@ -110,12 +116,6 @@ async function checkaddart(author, date, title, text) {
             return false
         }
     }
-
-    document.getElementById("addartauthor").value = ""
-    document.getElementById("addartdate").value = ""
-    document.getElementById("addarttitle").value = ""
-    document.getElementById("addarttext").value = ""
-
     return true
 }
 
@@ -128,7 +128,7 @@ async function addarttodb() {
     const addtitle = document.getElementById("addarttitle").value
     const addtext = document.getElementById("addarttext").value
 
-    const isartok = await checkaddart(addauthor, adddate, addtitle, addtext)
+    const isartok = await checkart(addauthor, adddate, addtitle, addtext)
 
     if (isartok) {
         const { data, error } = await supabase
@@ -146,6 +146,10 @@ async function addarttodb() {
             return false
         }
         console.log("Dodano artykuł");
+        document.getElementById("addartauthor").value = ""
+        document.getElementById("addartdate").value = ""
+        document.getElementById("addarttitle").value = ""
+        document.getElementById("addarttext").value = ""
         location.reload()
         addform.close()
         return true
@@ -209,19 +213,22 @@ async function editarttodb() {
     const updatedData = { author: newauthor, date: newdate, title: newtitle, article: newtext }
 
     console.log("zapisywanie zmian w artykule ", editedformid);
+    const isartok = await checkart(newauthor, newdate, newtitle, newtext)
+    if (isartok) {
+        const { data, error } = await supabase
+            .from('artykuly')
+            .update(updatedData)
+            .eq('id', editedformid)
+        if (error) {
+            console.error("Błąd edytowania artykulu", error);
+        }
+        else {
+            console.log("Zaktualizowano artykuł ", editedformid, newtitle);
+            editform.close()
+            location.reload()
+        }
+    }
 
-    const { data, error } = await supabase
-        .from('artykuly')
-        .update(updatedData)
-        .eq('id', editedformid)
-    if (error) {
-        console.error("Błąd edytowania artykulu", error);
-    }
-    else {
-        console.log("Zaktualizowano artykuł ", editedformid, newtitle);
-        editform.close()
-        location.reload()
-    }
 }
 window.editarttodb = editarttodb
 
@@ -234,19 +241,24 @@ window.editartcancel = editartcancel
 
 // ################## USUWANIE ARTYKUŁU: ######################
 async function articleDel(artnum, arttitle) {
-    let areyousure = confirm("Czy na pewno chcesz usunąć artykuł " + arttitle + "?")
-    if (areyousure == true) {
-        const { data, error } = await supabase
-            .from('artykuly')
-            .delete()
-            .eq('id', artnum)
-        if (error) {
-            console.error("Błąd podczas usuwania:", error.message);
-            alert("Nie udało się usunąć artykułu.");
-        } else {
-            console.log("Artykuł usunięty pomyślnie!");
-            location.reload()
+    if (localStorage.getItem("loginsave")) {
+        let areyousure = confirm("Czy na pewno chcesz usunąć artykuł " + arttitle + "?")
+        if (areyousure == true) {
+            const { data, error } = await supabase
+                .from('artykuly')
+                .delete()
+                .eq('id', artnum)
+            if (error) {
+                console.error("Błąd podczas usuwania:", error.message);
+                alert("Nie udało się usunąć artykułu.");
+            } else {
+                console.log("Artykuł usunięty pomyślnie!");
+                location.reload()
+            }
         }
+    }
+    else {
+        alert("Musisz być zalogowany aby usuwać artykuły!")
     }
 
 }
@@ -254,11 +266,13 @@ window.articleDel = articleDel
 
 
 // ################ ODCZYTYWANIE ARTYKUŁÓW Z BAZY: ##############
-async function articleread() {
+async function articleread(order) {
+    console.log(order);
+
     const { data, error } = await supabase
         .from('artykuly')
         .select('*')
-        .order('author', { ascending: true })
+        .order(order, { ascending: true })
     if (error) {
         console.error("Błąd pobierania:", error)
         return
