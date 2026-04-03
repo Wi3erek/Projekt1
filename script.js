@@ -93,7 +93,80 @@ async function articleDel(x) { // usuwanie artykułu
 }
 window.articleDel = articleDel
 
+async function showaddform() { // pokazywanie forma dodawania artykułów (jezeli jest zalogowany)
+    console.log(localStorage.getItem("loginsave"));
+    if (localStorage.getItem("loginsave")) {
+        const addform = document.getElementById("addform")
+        document.getElementById("addartauthor").value = localStorage.getItem("loginsave")
+        console.log("formularz dodawania artykułu");
+        addform.showModal()
+    }
+    else {
+        alert("Musisz być zalogowany aby dodawać artykuły!");
+    }
 
+}
+window.showaddform = showaddform
+
+async function addarttodb() { // dodawanie art do bazy danych
+    const addform = document.getElementById("addform")
+
+    const addauthor = document.getElementById("addartauthor").value
+    const adddate = document.getElementById("addartdate").value
+    const addtitle = document.getElementById("addarttitle").value
+    const addtext = document.getElementById("addarttext").value
+
+    const isartok = await checkaddart(addauthor, adddate, addtitle, addtext)
+
+    if (isartok) {
+        const { data, error } = await supabase
+            .from('artykuly')
+            .insert([
+                {
+                    author: addauthor,
+                    date: adddate,
+                    title: addtitle,
+                    article: addtext
+                }
+            ])
+        if (error) {
+            console.error("Błąd dodawania artykułu:", error.message)
+            return false
+        }
+        console.log("Dodano artykuł");
+        location.reload()
+        addform.close()
+        return true
+    }
+
+}
+
+async function addartcancel() {
+    console.log("anulowanie dodawania artykulu");
+    const addform = document.getElementById("addform")
+    addform.close()
+}
+window.addartcancel = addartcancel
+
+async function checkaddart(author, date, title, text) { // sprawdzanie czy form dodawania art jest dobrze wypelniony
+    const addarticle = { "author": author, "date": date, "title": title, "text": text }
+    console.log(addarticle);
+
+    for (let i in addarticle) {
+        if (addarticle[i] == "" || addarticle[i] == null) {
+            console.log(`error, brak danych w ${i}`);
+            return false
+        }
+    }
+
+    document.getElementById("addartauthor").value = ""
+    document.getElementById("addartdate").value = ""
+    document.getElementById("addarttitle").value = ""
+    document.getElementById("addarttext").value = ""
+
+    return true
+}
+window.addarttodb = addarttodb
 
 async function articleread() {
     const { data, error } = await supabase

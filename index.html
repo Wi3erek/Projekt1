@@ -10,6 +10,19 @@
 </head>
 
 <body>
+    <dialog id="addform">
+        <h3>Napisz nowy artykuł</h3>
+        <label>Autor:</label>
+        <input id="addartauthor" type="text">
+        <label>Data:</label>
+        <input id="addartdate" type="date">
+        <label>Tytuł:</label>
+        <input id="addarttitle" type="text">
+        <label>Treść artykułu:</label>
+        <textarea id="addarttext"></textarea>
+        <button onclick="addarttodb()">Dodaj</button>
+        <button onclick="addartcancel()">Anuluj</button>
+    </dialog>
     <div id="box">
         <header>
             <div class="headbox" id="addbox">
@@ -38,9 +51,7 @@
             </div>
         </header>
         <div id="left">
-            <div class="button" id="add">
-                DODAJ
-            </div>
+            <button onclick="showaddform()">Dodaj</button>
         </div>
         <div id="center">
         </div>

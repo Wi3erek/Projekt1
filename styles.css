@@ -119,3 +119,35 @@ input {
     width: 200px;
     height: 30px;
 }
+
+#addform {
+    width: 300px;
+    padding: 20px;
+}
+
+#addform::backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+#addform * {
+    box-sizing: border-box;
+}
+
+#addform label,
+#addform input,
+#addform textarea,
+#addform button {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+    /* Odstęp między polami */
+}
+
+#addform textarea {
+    height: 80px;
+}
+
+#addform h3 {
+    margin-top: 0;
+    text-align: center;
+}
