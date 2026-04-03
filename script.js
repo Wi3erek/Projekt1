@@ -23,6 +23,7 @@ if (logout) {
     logout.addEventListener("click", logmeout)
 }
 
+// generowanie artykułów na stronie
 const artbox = document.getElementById("center")
 if (artbox) {
     const artykuly = await articleread()
@@ -57,12 +58,12 @@ if (artbox) {
 
         const buttonEdit = document.createElement('button')
         buttonEdit.setAttribute('class', 'art-button')
-        buttonEdit.setAttribute('onclick', 'articleEdit("art" + ' + artid + ')')
+        buttonEdit.setAttribute('onclick', `articleEdit(${artid}, '${arttitle}')`)
         buttonEdit.innerHTML = "Edytuj"
 
         const buttonDel = document.createElement('button')
         buttonDel.setAttribute('class', 'art-button')
-        buttonDel.setAttribute('onclick', 'articleDel("art" + ' + artid + ')')
+        buttonDel.setAttribute('onclick', `articleDel(${artid}, '${arttitle}')`)
         buttonDel.innerHTML = "Usuń"
 
         buttonContainer.appendChild(buttonEdit)
@@ -77,23 +78,13 @@ if (artbox) {
         artbox.appendChild(artDiv)
     }
 }
-// dodawanie artykułów z bazy danych do strony
 
-// ------------------------------------------
-async function articleEdit(x) { //edytowanie artykułu
-    console.log("edytowanie artykułu", x);
-
-}
-window.articleEdit = articleEdit
+// ############################################################
 
 
-async function articleDel(x) { // usuwanie artykułu
-    console.log("usuwanie artykułu", x);
-
-}
-window.articleDel = articleDel
-
-async function showaddform() { // pokazywanie forma dodawania artykułów (jezeli jest zalogowany)
+// ############### DODAWANIE ARTYKUŁU: ###################
+// pokazywanie forma (jezeli zalogowany)
+async function showaddform() {
     console.log(localStorage.getItem("loginsave"));
     if (localStorage.getItem("loginsave")) {
         const addform = document.getElementById("addform")
@@ -108,7 +99,28 @@ async function showaddform() { // pokazywanie forma dodawania artykułów (jezel
 }
 window.showaddform = showaddform
 
-async function addarttodb() { // dodawanie art do bazy danych
+// weryfikacja forma (czy dobrze wypełniony)
+async function checkaddart(author, date, title, text) {
+    const addarticle = { "author": author, "date": date, "title": title, "text": text }
+    console.log(addarticle);
+
+    for (let i in addarticle) {
+        if (addarticle[i] == "" || addarticle[i] == null) {
+            console.log(`error, brak danych w ${i}`);
+            return false
+        }
+    }
+
+    document.getElementById("addartauthor").value = ""
+    document.getElementById("addartdate").value = ""
+    document.getElementById("addarttitle").value = ""
+    document.getElementById("addarttext").value = ""
+
+    return true
+}
+
+// dodawanie art do bazy danych
+async function addarttodb() {
     const addform = document.getElementById("addform")
 
     const addauthor = document.getElementById("addartauthor").value
@@ -140,7 +152,9 @@ async function addarttodb() { // dodawanie art do bazy danych
     }
 
 }
+window.addarttodb = addarttodb
 
+// anulowanie dodawania art
 async function addartcancel() {
     console.log("anulowanie dodawania artykulu");
     const addform = document.getElementById("addform")
@@ -148,26 +162,36 @@ async function addartcancel() {
 }
 window.addartcancel = addartcancel
 
-async function checkaddart(author, date, title, text) { // sprawdzanie czy form dodawania art jest dobrze wypelniony
-    const addarticle = { "author": author, "date": date, "title": title, "text": text }
-    console.log(addarticle);
 
-    for (let i in addarticle) {
-        if (addarticle[i] == "" || addarticle[i] == null) {
-            console.log(`error, brak danych w ${i}`);
-            return false
+// ################## EDYTOWANIE ARTYKUŁU: ###################
+async function articleEdit(artnum) {
+    console.log("edytowanie artykułu", artnum);
+}
+window.articleEdit = articleEdit
+
+
+// ################## USUWANIE ARTYKUŁU: ######################
+async function articleDel(artnum, arttitle) {
+    let areyousure = confirm("Czy na pewno chcesz usunąć artykuł " + arttitle + "?")
+    if (areyousure == true) {
+        const { data, error } = await supabase
+            .from('artykuly')
+            .delete()
+            .eq('id', artnum)
+        if (error) {
+            console.error("Błąd podczas usuwania:", error.message);
+            alert("Nie udało się usunąć artykułu.");
+        } else {
+            console.log("Artykuł usunięty pomyślnie!");
+            location.reload()
         }
     }
 
-    document.getElementById("addartauthor").value = ""
-    document.getElementById("addartdate").value = ""
-    document.getElementById("addarttitle").value = ""
-    document.getElementById("addarttext").value = ""
-
-    return true
 }
-window.addarttodb = addarttodb
+window.articleDel = articleDel
 
+
+// ################ ODCZYTYWANIE ARTYKUŁÓW Z BAZY: ##############
 async function articleread() {
     const { data, error } = await supabase
         .from('artykuly')
@@ -177,61 +201,12 @@ async function articleread() {
         return
     }
     return data
-
 }
 
-async function logmeout() {
-    localStorage.removeItem("loginsave")
-    window.location = "index.html" //zmienic na login.html
-}
 
-async function loggedas(login) {
-    const logElem = document.getElementById("logas")
-    if (logElem) {
-        logElem.innerHTML = login
-    }
-}
-
-async function logchecker(log, pass) {
-    const { data, error } = await supabase
-        .from('loginy')
-        .select('login, password')
-    if (error) {
-        console.error("Błąd pobierania:", error)
-        return
-    }
-
-    console.log(data);
-    for (let i = 0; i < data.length; i++) {
-        if (data[i].login == log && data[i].password == pass) {
-            return true
-        }
-    }
-    return false
-}
-// czy dane logowania sie zgadzają
-
-async function loginF() {
-    const login = document.getElementById("loglogin").value
-    const passwd = document.getElementById("logpasswd").value
-    console.log("Próba zalogowania: ", login, passwd);
-
-    const isLogOK = await logchecker(login, passwd)
-    console.log(isLogOK);
-    if (isLogOK == true) {
-        console.log("Zalogowano użytkownika", login);
-        localStorage.setItem("loginsave", login)
-        window.location.href = "index.html"
-    }
-    else {
-        console.log("Błędny login lub hasło.");
-
-    }
-}
-// logowanie
-
-
-async function getLogins(log) {
+// ################ REJESTRACJA: #####################
+// sprawdzanie czy login nie jest zajęty
+async function checkLoginAvailability(log) {
     const { data, error } = await supabase
         .from('loginy')
         .select('login')
@@ -247,15 +222,15 @@ async function getLogins(log) {
     }
     return true
 }
-// czy loginu nie ma juz w bazie
 
+// weryfikacja rejestracji (czy hasła spełniają wymogi)
 async function registerF() {
     const login = document.getElementById("reglogin").value
     const passwd = document.getElementById("regpasswd").value
     const passwd2 = document.getElementById("regpasswd2").value
     console.log("login:", login, "| passwd:", passwd, "| passwd2", passwd2)
 
-    const isLoginFree = await getLogins(login)
+    const isLoginFree = await checkLoginAvailability(login)
 
     if (isLoginFree == true) {
         if (passwd.length > 3) {
@@ -264,24 +239,19 @@ async function registerF() {
             }
             else {
                 console.log("rejestrowanie . . .");
-
                 addUser(login, passwd)
-
             }
         }
         else {
             console.log("ERROR: Za krótkie hasło.");
-
         }
-
     }
     else {
         console.log("ERROR: Uzytkownik o takiej nazwie juz istnieje");
     }
-
 }
-// rejestracja
 
+// dodawanie usera do bazy danych
 async function addUser(userlogin, userpasswd) {
     const { data, error } = await supabase
         .from('loginy')
@@ -299,6 +269,57 @@ async function addUser(userlogin, userpasswd) {
     return true
 
 }
-// dodawanie do bazy danych (reg)
 
+// ################## LOGOWANIE: #######################
+// czy wpisane dane się zgadzają z tymi w bazie - login, hasło
+async function logchecker(log, pass) {
+    const { data, error } = await supabase
+        .from('loginy')
+        .select('login, password')
+    if (error) {
+        console.error("Błąd pobierania:", error)
+        return
+    }
+
+    console.log(data);
+    for (let i = 0; i < data.length; i++) {
+        if (data[i].login == log && data[i].password == pass) {
+            return true
+        }
+    }
+    return false
+}
+
+// zapisanie kto jest zalogowany na stronie (localstorage)
+async function loginF() {
+    const login = document.getElementById("loglogin").value
+    const passwd = document.getElementById("logpasswd").value
+    console.log("Próba zalogowania: ", login, passwd);
+
+    const isLogOK = await logchecker(login, passwd) //weryfikacja danych
+    console.log(isLogOK);
+    if (isLogOK == true) {
+        console.log("Zalogowano użytkownika", login);
+        localStorage.setItem("loginsave", login)
+        window.location.href = "index.html"
+    }
+    else {
+        console.log("Błędny login lub hasło.");
+
+    }
+}
+
+// info "Zalogowano jako: ..."
+async function loggedas(login) {
+    const logElem = document.getElementById("logas")
+    if (logElem) {
+        logElem.innerHTML = login
+    }
+}
+
+// wylogowanie
+async function logmeout() {
+    localStorage.removeItem("loginsave")
+    window.location = "index.html" //zmienic na login.html
+}
 
