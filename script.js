@@ -24,64 +24,87 @@ if (logout) {
 }
 
 // generowanie artykułów na stronie
-const sortby = document.getElementById("sortby").value
-const artbox = document.getElementById("center")
-if (artbox && sortby) {
-    const artykuly = await articleread(sortby)
-    console.log(artykuly);
-    for (let i = 0; i < artykuly.length; i++) {
-        let artid = artykuly[i].id
-        let artauthor = artykuly[i].author
-        let artdate = artykuly[i].date
-        let arttitle = artykuly[i].title
-        let arttext = artykuly[i].article
 
-        const artDiv = document.createElement('div')
-        artDiv.setAttribute('class', 'art')
-        artDiv.setAttribute('id', 'art' + artid)
+async function generatearticles() {
+    const sortby = document.getElementById("sortby").value
+    const authorselected = document.getElementById("authorsel").value
+    const artbox = document.getElementById("center")
+    artbox.innerHTML = ""
+    if (artbox && sortby) {
+        const artykuly = await articleread(sortby, authorselected)
+        console.log(artykuly);
+        for (let i = 0; i < artykuly.length; i++) {
+            let artid = artykuly[i].id
+            let artauthorfirst = artykuly[i].author_firstname
+            let artauthorsur = artykuly[i].author_surname
+            let artdate = artykuly[i].date
+            let arttitle = artykuly[i].title
+            let arttext = artykuly[i].article
 
-        // zawartosc artykułów
-        const authorElem = document.createElement('author')
-        authorElem.innerHTML = artauthor
+            const artDiv = document.createElement('div')
+            artDiv.setAttribute('class', 'art')
+            artDiv.setAttribute('id', 'art' + artid)
 
-        const dateElem = document.createElement('time')
-        dateElem.innerHTML = artdate
+            // zawartosc artykułów
+            const authorElem = document.createElement('author')
+            authorElem.innerHTML = artauthorfirst + " " + artauthorsur
 
-        const titleElem = document.createElement('h3')
-        titleElem.innerHTML = arttitle
+            const dateElem = document.createElement('time')
+            dateElem.innerHTML = artdate
 
-        const textElem = document.createElement('p')
-        textElem.innerHTML = arttext
+            const titleElem = document.createElement('h3')
+            titleElem.innerHTML = arttitle
 
-        // przyciski edycji/usuwania
-        const buttonContainer = document.createElement('div')
-        buttonContainer.setAttribute('class', 'button-container')
+            const textElem = document.createElement('p')
+            textElem.innerHTML = arttext
 
-        const buttonEdit = document.createElement('button')
-        buttonEdit.setAttribute('class', 'art-button')
-        buttonEdit.setAttribute('onclick', `showeditform(${artid}, '${arttitle}')`)
-        buttonEdit.innerHTML = "Edytuj"
+            // przyciski edycji/usuwania
+            const buttonContainer = document.createElement('div')
+            buttonContainer.setAttribute('class', 'button-container')
 
-        const buttonDel = document.createElement('button')
-        buttonDel.setAttribute('class', 'art-button')
-        buttonDel.setAttribute('onclick', `articleDel(${artid}, '${arttitle}')`)
-        buttonDel.innerHTML = "Usuń"
+            const buttonEdit = document.createElement('button')
+            buttonEdit.setAttribute('class', 'art-button')
+            buttonEdit.setAttribute('onclick', `showeditform(${artid}, '${arttitle}')`)
+            buttonEdit.innerHTML = "Edytuj"
 
-        buttonContainer.appendChild(buttonEdit)
-        buttonContainer.appendChild(buttonDel)
+            const buttonDel = document.createElement('button')
+            buttonDel.setAttribute('class', 'art-button')
+            buttonDel.setAttribute('onclick', `articleDel(${artid}, '${arttitle}')`)
+            buttonDel.innerHTML = "Usuń"
 
-        artDiv.appendChild(authorElem)
-        artDiv.appendChild(dateElem)
-        artDiv.appendChild(titleElem)
-        artDiv.appendChild(textElem)
-        artDiv.appendChild(buttonContainer)
+            buttonContainer.appendChild(buttonEdit)
+            buttonContainer.appendChild(buttonDel)
 
-        artbox.appendChild(artDiv)
+            artDiv.appendChild(authorElem)
+            artDiv.appendChild(dateElem)
+            artDiv.appendChild(titleElem)
+            artDiv.appendChild(textElem)
+            artDiv.appendChild(buttonContainer)
+
+            artbox.appendChild(artDiv)
+        }
+    }
+}
+generatearticles()
+
+// generowanie listy autorów
+const authorbox = document.getElementById("authorsel")
+if (authorbox) {
+    const lista = await readauthors()
+    console.log(lista);
+
+    for (let i = 0; i < lista.length; i++) {
+        const opt = document.createElement("option")
+        opt.value = lista[i]
+        opt.innerHTML = lista[i]
+        authorbox.appendChild(opt)
     }
 }
 
+
 async function reload() {
-    location.reload()
+    console.log("reload");
+    generatearticles()
 }
 window.reload = reload
 
@@ -94,7 +117,6 @@ async function showaddform() {
     console.log(localStorage.getItem("loginsave"));
     if (localStorage.getItem("loginsave")) {
         const addform = document.getElementById("addform")
-        document.getElementById("addartauthor").value = localStorage.getItem("loginsave")
         console.log("formularz dodawania artykułu");
         addform.showModal()
     }
@@ -106,8 +128,8 @@ async function showaddform() {
 window.showaddform = showaddform
 
 // weryfikacja forma (czy dobrze wypełniony)
-async function checkart(author, date, title, text) {
-    const addarticle = { "author": author, "date": date, "title": title, "text": text }
+async function checkart(authorsur, authorfirst, date, title, text) {
+    const addarticle = { "author_surname": authorsur, "author_firstname": authorfirst, "date": date, "title": title, "text": text }
     console.log(addarticle);
 
     for (let i in addarticle) {
@@ -123,19 +145,21 @@ async function checkart(author, date, title, text) {
 async function addarttodb() {
     const addform = document.getElementById("addform")
 
-    const addauthor = document.getElementById("addartauthor").value
+    const addauthorfirst = document.getElementById("addartauthorfirst").value
+    const addauthorsur = document.getElementById("addartauthorsur").value
     const adddate = document.getElementById("addartdate").value
     const addtitle = document.getElementById("addarttitle").value
     const addtext = document.getElementById("addarttext").value
 
-    const isartok = await checkart(addauthor, adddate, addtitle, addtext)
+    const isartok = await checkart(addauthorsur, addauthorfirst, adddate, addtitle, addtext)
 
     if (isartok) {
         const { data, error } = await supabase
             .from('artykuly')
             .insert([
                 {
-                    author: addauthor,
+                    author_surname: addauthorsur,
+                    author_firstname: addauthorfirst,
                     date: adddate,
                     title: addtitle,
                     article: addtext
@@ -146,11 +170,12 @@ async function addarttodb() {
             return false
         }
         console.log("Dodano artykuł");
-        document.getElementById("addartauthor").value = ""
+        document.getElementById("addartauthorfirst").value = ""
+        document.getElementById("addartauthorsur").value = ""
         document.getElementById("addartdate").value = ""
         document.getElementById("addarttitle").value = ""
         document.getElementById("addarttext").value = ""
-        location.reload()
+        generatearticles()
         addform.close()
         return true
     }
@@ -181,15 +206,17 @@ async function showeditform(artnum) {
             return
         }
         console.log(data);
-        const oldauthor = data[0].author
+        const oldauthorfirst = data[0].author_firstname
+        const oldauthorsur = data[0].author_surname
         const olddate = data[0].date
         const oldtitle = data[0].title
         const oldtext = data[0].article
-        console.log(oldauthor, olddate, oldtitle, oldtext);
+        console.log(oldauthorsur, oldauthorfirst, olddate, oldtitle, oldtext);
 
         const editform = document.getElementById("editform")
         document.getElementById("editartid").value = artnum
-        document.getElementById("editartauthor").value = oldauthor
+        document.getElementById("editartauthorfirst").value = oldauthorfirst
+        document.getElementById("editartauthorsur").value = oldauthorsur
         document.getElementById("editartdate").value = olddate
         document.getElementById("editarttitle").value = oldtitle
         document.getElementById("editarttext").value = oldtext
@@ -206,14 +233,15 @@ async function editarttodb() {
     const editform = document.getElementById("editform")
 
     const editedformid = document.getElementById("editartid").value
-    const newauthor = document.getElementById("editartauthor").value
+    const newauthorfirst = document.getElementById("editartauthorfirst").value
+    const newauthorsur = document.getElementById("editartauthorsur").value
     const newdate = document.getElementById("editartdate").value
     const newtitle = document.getElementById("editarttitle").value
     const newtext = document.getElementById("editarttext").value
-    const updatedData = { author: newauthor, date: newdate, title: newtitle, article: newtext }
+    const updatedData = { author_surname: newauthorsur, author_firstname: newauthorfirst, date: newdate, title: newtitle, article: newtext }
 
     console.log("zapisywanie zmian w artykule ", editedformid);
-    const isartok = await checkart(newauthor, newdate, newtitle, newtext)
+    const isartok = await checkart(newauthorsur, newauthorfirst, newdate, newtitle, newtext)
     if (isartok) {
         const { data, error } = await supabase
             .from('artykuly')
@@ -266,20 +294,59 @@ window.articleDel = articleDel
 
 
 // ################ ODCZYTYWANIE ARTYKUŁÓW Z BAZY: ##############
-async function articleread(order) {
-    console.log(order);
+async function articleread(order, authorselected) {
+    console.log(order, authorselected.split(' '));
+    if (authorselected != "all") {
+        let surname = authorselected.split(' ')[1]
+        let firstname = authorselected.split(' ')[0]
+        const { data, error } = await supabase
+            .from('artykuly')
+            .select('*')
+            .order(order, { ascending: true })
+            .eq('author_surname', surname)
+            .eq('author_firstname', firstname)
+        if (error) {
+            console.error("Błąd pobierania:", error)
+            return
+        }
+        return data
+    }
+    else {
+        const { data, error } = await supabase
+            .from('artykuly')
+            .select('*')
+            .order(order, { ascending: true })
+        if (error) {
+            console.error("Błąd pobierania:", error)
+            return
+        }
+        return data
+    }
 
+}
+
+// lista autorów z bazy
+async function readauthors() {
     const { data, error } = await supabase
         .from('artykuly')
-        .select('*')
-        .order(order, { ascending: true })
+        .select('author_firstname,author_surname')
     if (error) {
         console.error("Błąd pobierania:", error)
         return
     }
-    return data
+    const autlist = []
+    for (let i = 0; i < data.length; i++) {
+        if (autlist.includes(data[i].author_firstname + " " + data[i].author_surname) == false) {
+            autlist.push(data[i].author_firstname + " " + data[i].author_surname)
+        }
+    }
+    return autlist
 }
 
+async function authorsel() {
+    generatearticles()
+}
+window.authorsel = authorsel
 
 // ################ REJESTRACJA: #####################
 // sprawdzanie czy login nie jest zajęty

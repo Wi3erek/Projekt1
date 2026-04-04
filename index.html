@@ -12,8 +12,10 @@
 <body>
     <dialog id="addform">
         <h3>Napisz nowy artykuł</h3>
-        <label>Autor:</label>
-        <input id="addartauthor" type="text">
+        <label>Imię autora:</label>
+        <input id="addartauthorfirst" type="text">
+        <label>Nazwisko autora:</label>
+        <input id="addartauthorsur" type="text">
         <label>Data:</label>
         <input id="addartdate" type="date">
         <label>Tytuł:</label>
@@ -26,8 +28,10 @@
     <dialog id="editform">
         <h3>Edytuj artykuł</h3>
         <input type="hidden" id="editartid">
-        <label>Autor:</label>
-        <input id="editartauthor" type="text">
+        <label>Imię autora::</label>
+        <input id="editartauthorfirst" type="text">
+        <label>Nazwisko autora:</label>
+        <input id="editartauthorsur" type="text">
         <label>Data:</label>
         <input id="editartdate" type="date">
         <label>Tytuł:</label>
@@ -66,11 +70,17 @@
         </header>
         <div id="left">
             <button onclick="showaddform()">Dodaj</button>
+            <br>
+            Sortowanie:
             <select id="sortby" onchange="reload()">
-                <option value="author">Autor</option>
+                <option value="author_surname">Autor [nazwisko]</option>
                 <option value="date">Data</option>
                 <option value="title">Tytuł</option>
                 <option value="id">ID</option>
+            </select>
+            Autorzy:
+            <select id="authorsel" onchange="authorsel()">
+                <option value="all">Wszyscy autorzy</option>
             </select>
         </div>
         <div id="center">
