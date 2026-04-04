@@ -26,80 +26,102 @@ if (logout) {
 // generowanie artykułów na stronie
 
 async function generatearticles() {
-    const sortby = document.getElementById("sortby").value
-    const authorselected = document.getElementById("authorsel").value
-    const artbox = document.getElementById("center")
-    artbox.innerHTML = ""
-    if (artbox && sortby) {
-        const artykuly = await articleread(sortby, authorselected)
-        console.log(artykuly);
-        for (let i = 0; i < artykuly.length; i++) {
-            let artid = artykuly[i].id
-            let artauthorfirst = artykuly[i].author_firstname
-            let artauthorsur = artykuly[i].author_surname
-            let artdate = artykuly[i].date
-            let arttitle = artykuly[i].title
-            let arttext = artykuly[i].article
+    const islistready = await genauthorlist()
+    if (islistready) {
+        const sortby = document.getElementById("sortby").value
+        const authorselected = document.getElementById("authorsel").value
+        const artbox = document.getElementById("center")
+        artbox.innerHTML = ""
+        if (artbox && sortby) {
+            const artykuly = await articleread(sortby, authorselected)
+            console.log(artykuly);
+            for (let i = 0; i < artykuly.length; i++) {
+                let artid = artykuly[i].id
+                let artauthorfirst = artykuly[i].author_firstname
+                let artauthorsur = artykuly[i].author_surname
+                let artdate = artykuly[i].date
+                let arttitle = artykuly[i].title
+                let arttext = artykuly[i].article
 
-            const artDiv = document.createElement('div')
-            artDiv.setAttribute('class', 'art')
-            artDiv.setAttribute('id', 'art' + artid)
+                const artDiv = document.createElement('div')
+                artDiv.setAttribute('class', 'art')
+                artDiv.setAttribute('id', 'art' + artid)
 
-            // zawartosc artykułów
-            const authorElem = document.createElement('author')
-            authorElem.innerHTML = artauthorfirst + " " + artauthorsur
+                // zawartosc artykułów
+                const authorElem = document.createElement('author')
+                authorElem.innerHTML = artauthorfirst + " " + artauthorsur
 
-            const dateElem = document.createElement('time')
-            dateElem.innerHTML = artdate
+                const dateElem = document.createElement('time')
+                dateElem.innerHTML = artdate
 
-            const titleElem = document.createElement('h3')
-            titleElem.innerHTML = arttitle
+                const titleElem = document.createElement('h3')
+                titleElem.innerHTML = arttitle
 
-            const textElem = document.createElement('p')
-            textElem.innerHTML = arttext
+                const textElem = document.createElement('p')
+                textElem.innerHTML = arttext
 
-            // przyciski edycji/usuwania
-            const buttonContainer = document.createElement('div')
-            buttonContainer.setAttribute('class', 'button-container')
+                // przyciski edycji/usuwania
+                const buttonContainer = document.createElement('div')
+                buttonContainer.setAttribute('class', 'button-container')
 
-            const buttonEdit = document.createElement('button')
-            buttonEdit.setAttribute('class', 'art-button')
-            buttonEdit.setAttribute('onclick', `showeditform(${artid}, '${arttitle}')`)
-            buttonEdit.innerHTML = "Edytuj"
+                const buttonEdit = document.createElement('button')
+                buttonEdit.setAttribute('class', 'art-button')
+                buttonEdit.setAttribute('onclick', `showeditform(${artid}, '${arttitle}')`)
+                buttonEdit.innerHTML = "Edytuj"
 
-            const buttonDel = document.createElement('button')
-            buttonDel.setAttribute('class', 'art-button')
-            buttonDel.setAttribute('onclick', `articleDel(${artid}, '${arttitle}')`)
-            buttonDel.innerHTML = "Usuń"
+                const buttonDel = document.createElement('button')
+                buttonDel.setAttribute('class', 'art-button')
+                buttonDel.setAttribute('onclick', `articleDel(${artid}, '${arttitle}')`)
+                buttonDel.innerHTML = "Usuń"
 
-            buttonContainer.appendChild(buttonEdit)
-            buttonContainer.appendChild(buttonDel)
+                buttonContainer.appendChild(buttonEdit)
+                buttonContainer.appendChild(buttonDel)
 
-            artDiv.appendChild(authorElem)
-            artDiv.appendChild(dateElem)
-            artDiv.appendChild(titleElem)
-            artDiv.appendChild(textElem)
-            artDiv.appendChild(buttonContainer)
+                artDiv.appendChild(authorElem)
+                artDiv.appendChild(dateElem)
+                artDiv.appendChild(titleElem)
+                artDiv.appendChild(textElem)
+                artDiv.appendChild(buttonContainer)
 
-            artbox.appendChild(artDiv)
+                artbox.appendChild(artDiv)
+            }
         }
     }
+
+
+
+
 }
 generatearticles()
 
 // generowanie listy autorów
-const authorbox = document.getElementById("authorsel")
-if (authorbox) {
-    const lista = await readauthors()
-    console.log(lista);
+async function genauthorlist() {
+    const authorbox = document.getElementById("authorsel")
+    authorbox.innerHTML = "<option value='all'>Wszyscy autorzy</option>"
+    if (authorbox) {
+        const lista = await readauthors()
+        console.log(lista);
 
-    for (let i = 0; i < lista.length; i++) {
-        const opt = document.createElement("option")
-        opt.value = lista[i]
-        opt.innerHTML = lista[i]
-        authorbox.appendChild(opt)
+        for (let i = 0; i < lista.length; i++) {
+            const opt = document.createElement("option")
+            opt.value = lista[i]
+            opt.innerHTML = lista[i]
+            authorbox.appendChild(opt)
+        }
+
+        let defaultauthoropt = localStorage.getItem("selectedauthor")
+        console.log("zapisny wybor autora", defaultauthoropt);
+        if (defaultauthoropt && lista.includes(defaultauthoropt)) {
+            // sprawdzic czy zapisana wartosc (default) jest na liscie autorów w ogole
+            authorbox.value = localStorage.getItem("selectedauthor")
+        }
+        else {
+            authorbox.value = "all"
+        }
+        return true
     }
 }
+
 
 
 async function reload() {
@@ -169,15 +191,18 @@ async function addarttodb() {
             console.error("Błąd dodawania artykułu:", error.message)
             return false
         }
-        console.log("Dodano artykuł");
-        document.getElementById("addartauthorfirst").value = ""
-        document.getElementById("addartauthorsur").value = ""
-        document.getElementById("addartdate").value = ""
-        document.getElementById("addarttitle").value = ""
-        document.getElementById("addarttext").value = ""
-        generatearticles()
-        addform.close()
-        return true
+        else {
+            console.log("Dodano artykuł");
+            document.getElementById("addartauthorfirst").value = ""
+            document.getElementById("addartauthorsur").value = ""
+            document.getElementById("addartdate").value = ""
+            document.getElementById("addarttitle").value = ""
+            document.getElementById("addarttext").value = ""
+            generatearticles()
+            addform.close()
+            return true
+        }
+
     }
 
 }
@@ -253,7 +278,7 @@ async function editarttodb() {
         else {
             console.log("Zaktualizowano artykuł ", editedformid, newtitle);
             editform.close()
-            location.reload()
+            generatearticles()
         }
     }
 
@@ -281,7 +306,7 @@ async function articleDel(artnum, arttitle) {
                 alert("Nie udało się usunąć artykułu.");
             } else {
                 console.log("Artykuł usunięty pomyślnie!");
-                location.reload()
+                generatearticles()
             }
         }
     }
@@ -330,6 +355,7 @@ async function readauthors() {
     const { data, error } = await supabase
         .from('artykuly')
         .select('author_firstname,author_surname')
+        .order('author_surname')
     if (error) {
         console.error("Błąd pobierania:", error)
         return
@@ -344,6 +370,10 @@ async function readauthors() {
 }
 
 async function authorsel() {
+    const selectedauthor = document.getElementById("authorsel").value
+    localStorage.setItem("selectedauthor", selectedauthor)
+    console.log("zapisano wybor: ", selectedauthor);
+
     generatearticles()
 }
 window.authorsel = authorsel
