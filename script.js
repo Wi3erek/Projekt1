@@ -43,36 +43,45 @@ async function generatearticles() {
                 let arttitle = artykuly[i].title
                 let arttext = artykuly[i].article
 
+                // ... (twój początkowy kod wewnątrz pętli for)
+
                 const artDiv = document.createElement('div')
-                artDiv.setAttribute('class', 'art')
+                // Nowoczesna biała karta z delikatnym cieniem i obramowaniem
+                artDiv.setAttribute('class', 'bg-white p-6 rounded-xl shadow-sm border border-gray-200 mb-6 flex flex-col gap-2 transition hover:shadow-md')
                 artDiv.setAttribute('id', 'art' + artid)
 
-                // zawartosc artykułów
+                // Zawartość artykułów z ładną typografią
                 const authorElem = document.createElement('author')
+                authorElem.setAttribute('class', 'text-sm font-semibold text-indigo-600 uppercase tracking-wider')
                 authorElem.innerHTML = artauthorfirst + " " + artauthorsur
 
                 const dateElem = document.createElement('time')
+                dateElem.setAttribute('class', 'text-xs text-gray-400 block -mt-1 mb-2')
                 dateElem.innerHTML = artdate
 
                 const titleElem = document.createElement('h3')
+                titleElem.setAttribute('class', 'text-xl font-bold text-gray-900 tracking-tight mb-2')
                 titleElem.innerHTML = arttitle
 
                 const textElem = document.createElement('p')
+                textElem.setAttribute('class', 'text-gray-600 leading-relaxed text-sm whitespace-pre-wrap')
                 textElem.innerHTML = arttext
 
-                // przyciski edycji/usuwania
+                // Przyciski edycji/usuwania (Zamiast jaskrawego różu – schludne, stonowane barwy)
                 const buttonContainer = document.createElement('div')
-                buttonContainer.setAttribute('class', 'button-container')
+                buttonContainer.setAttribute('class', 'flex gap-3 mt-4 pt-3 border-t border-gray-100')
 
                 const buttonEdit = document.createElement('button')
-                buttonEdit.setAttribute('class', 'art-button')
+                buttonEdit.setAttribute('class', 'px-3 py-1.5 bg-amber-50 text-amber-700 text-xs font-medium rounded-md hover:bg-amber-100 transition')
                 buttonEdit.setAttribute('onclick', `showeditform(${artid}, '${arttitle}')`)
                 buttonEdit.innerHTML = "Edytuj"
 
                 const buttonDel = document.createElement('button')
-                buttonDel.setAttribute('class', 'art-button')
+                buttonDel.setAttribute('class', 'px-3 py-1.5 bg-rose-50 text-rose-700 text-xs font-medium rounded-md hover:bg-rose-100 transition')
                 buttonDel.setAttribute('onclick', `articleDel(${artid}, '${arttitle}')`)
                 buttonDel.innerHTML = "Usuń"
+
+                // ... (reszta appendChild bez zmian)
 
                 buttonContainer.appendChild(buttonEdit)
                 buttonContainer.appendChild(buttonDel)

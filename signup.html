@@ -1,34 +1,58 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Rejestracja</title>
+    <!-- Ładowanie Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <script type="module" src="script.js"></script>
-    <style>
-
-    </style>
 </head>
 
-<body>
-    <div id="box2">
-        <div id="head">
-            ZAREJESTRUJ SIĘ
-            <a href="index.html">Artykuły</a>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center p-4 font-sans text-gray-800">
+
+    <!-- KARTA REJESTRACJI -->
+    <div id="box2" class="bg-white p-8 rounded-xl shadow-md w-full max-w-md border border-gray-200 flex flex-col gap-6">
+
+        <!-- NAGŁÓWEK KARTY -->
+        <div id="head" class="flex items-center justify-between border-b border-gray-100 pb-4">
+            <h2 class="text-lg font-bold text-gray-900 tracking-tight">ZAREJESTRUJ SIĘ</h2>
+            <a href="index.html" class="text-sm font-medium text-indigo-600 hover:text-indigo-700 hover:underline">← Artykuły</a>
         </div>
-        <div id="formbox">
-            <label>Login:</label>
-            <input id="reglogin" type="text" name="login">
-            <label>Hasło:</label>
-            <input id="regpasswd" type="password" name="passwd">
-            <label>Powtórz hasło:</label>
-            <input id="regpasswd2" type="password" name="passwd">
-            <button id="registerbutton">Zarejestruj</button>
+
+        <!-- FORMULARZ -->
+        <div id="formbox" class="flex flex-col gap-4">
+            <div>
+                <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-1">Login:</label>
+                <input id="reglogin" type="text" name="login"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-gray-50">
+            </div>
+
+            <div>
+                <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-1">Hasło:</label>
+                <input id="regpasswd" type="password" name="passwd"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-gray-50">
+            </div>
+
+            <div>
+                <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-1">Powtórz hasło:</label>
+                <input id="regpasswd2" type="password" name="passwd"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-gray-50">
+            </div>
+
+            <button id="registerbutton" class="w-full py-2.5 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition shadow-sm mt-2">
+                Zarejestruj
+            </button>
         </div>
-        <a href="login.html">Mam już konto</a>
+
+        <!-- STOPKA KARTY -->
+        <div class="text-center pt-2 border-t border-gray-100">
+            <a href="login.html" class="text-sm font-medium text-gray-500 hover:text-indigo-600 transition">Mam już konto</a>
+        </div>
+
     </div>
+
 </body>
 
 </html>
