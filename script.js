@@ -12,6 +12,11 @@ if (regbut) {
 }
 //przycisk rejestracji
 
+const isdesc = document.getElementById("isdesc")
+if (isdesc) {
+    isdesc.addEventListener("change", generatearticles)
+}
+
 const loginsave = localStorage.getItem("loginsave")
 if (loginsave) {
     loggedas(loginsave)
@@ -25,15 +30,18 @@ if (logout) {
 
 // generowanie artykułów na stronie
 
+
+
 async function generatearticles() {
     const islistready = await genauthorlist()
     if (islistready) {
+        const ascdesc = document.getElementById("isdesc").checked
         const sortby = document.getElementById("sortby").value
         const authorselected = document.getElementById("authorsel").value
         const artbox = document.getElementById("center")
         artbox.innerHTML = ""
         if (artbox && sortby) {
-            const artykuly = await articleread(sortby, authorselected)
+            const artykuly = await articleread(sortby, authorselected, ascdesc)
             console.log(artykuly);
             for (let i = 0; i < artykuly.length; i++) {
                 let artid = artykuly[i].id
@@ -328,15 +336,15 @@ window.articleDel = articleDel
 
 
 // ################ ODCZYTYWANIE ARTYKUŁÓW Z BAZY: ##############
-async function articleread(order, authorselected) {
-    console.log(order, authorselected.split(' '));
+async function articleread(order, authorselected, descasc) {
+    console.log(order, authorselected.split(' '), descasc);
     if (authorselected != "all") {
         let surname = authorselected.split(' ')[1]
         let firstname = authorselected.split(' ')[0]
         const { data, error } = await supabase
             .from('artykuly')
             .select('*')
-            .order(order, { ascending: true })
+            .order(order, { ascending: descasc })
             .eq('author_surname', surname)
             .eq('author_firstname', firstname)
         if (error) {
@@ -349,7 +357,7 @@ async function articleread(order, authorselected) {
         const { data, error } = await supabase
             .from('artykuly')
             .select('*')
-            .order(order, { ascending: true })
+            .order(order, { ascending: descasc })
         if (error) {
             console.error("Błąd pobierania:", error)
             return
