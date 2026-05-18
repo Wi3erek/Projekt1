@@ -28,8 +28,12 @@ if (logout) {
     logout.addEventListener("click", logmeout)
 }
 
-// generowanie artykułów na stronie
+const lightdark = document.getElementById("lightdark")
+if (lightdark) {
+    lightdark.addEventListener("click", changelight)
+}
 
+// generowanie artykułów na stronie
 
 
 async function generatearticles() {
@@ -60,7 +64,7 @@ async function generatearticles() {
 
                 // Zawartość artykułów z ładną typografią
                 const authorElem = document.createElement('author')
-                authorElem.setAttribute('class', 'text-sm font-semibold text-indigo-600 uppercase tracking-wider')
+                authorElem.setAttribute('class', 'text-sm font-semibold text-[#7c008a] uppercase tracking-wider')
                 authorElem.innerHTML = artauthorfirst + " " + artauthorsur
 
                 const dateElem = document.createElement('time')
